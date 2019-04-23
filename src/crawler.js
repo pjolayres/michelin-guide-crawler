@@ -8,7 +8,8 @@ const RetryCount = 5;
 
 export default class MichelinCrawler {
   static async run2() {
-    const links = await MichelinCrawler.fetchHardLinks();
+    // const links = await MichelinCrawler.fetchHardLinks();
+    const links = await MichelinCrawler.fetchLinks('https://gm.gnavi.co.jp/restaurant/list/tokyo');
     const restaurants = [];
 
     for (let i = 0; i < links.length; i++) {
