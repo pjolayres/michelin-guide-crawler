@@ -7,7 +7,7 @@ const BatchSize = 10;
 const RetryCount = 5;
 
 export default class MichelinCrawler {
-  static async run2() {
+  static async runSequentially() {
     // const links = await MichelinCrawler.fetchHardLinks();
     const links = await MichelinCrawler.fetchLinks('https://gm.gnavi.co.jp/restaurant/list/tokyo');
     const restaurants = [];
@@ -23,7 +23,8 @@ export default class MichelinCrawler {
   }
 
   static async run() {
-    const links = await MichelinCrawler.fetchHardLinks();
+    // const links = await MichelinCrawler.fetchHardLinks();
+    const links = await MichelinCrawler.fetchLinks('https://gm.gnavi.co.jp/restaurant/list/tokyo');
     const linkBatches = _.chunk(links, BatchSize);
     const restaurantBatches = [];
     let count = 0;
@@ -72,6 +73,8 @@ export default class MichelinCrawler {
     let links = [];
     let currentUrl = url;
 
+    logger.info('Fetching list of restaurant URLs');
+
     do {
       const dom = await JSDOM.fromURL(currentUrl); // eslint-disable-line no-await-in-loop
       const currentLinks = Utilities.mapDOM(dom.window.document, '#restaurantList li.part .rname a', a => a.href);
@@ -79,6 +82,8 @@ export default class MichelinCrawler {
       links = [...links, ...currentLinks];
 
       currentUrl = Utilities.firstOrDefaultDOM(dom.window.document, '#resultPager .pager li:nth-child(2) a', a => a.href);
+
+      logger.info(`Acquired ${links.length} URLs`);
     } while (currentUrl);
 
     return links;
