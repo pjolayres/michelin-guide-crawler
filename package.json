@@ -4,6 +4,7 @@
   "description": "A boilerplate for any automation-related scripts.",
   "main": "index.js",
   "scripts": {
+    "dev": "NODE_ENV=development babel-node index.js",
     "start": "babel-node index.js"
   },
   "author": "Paulo Olayres",
@@ -15,6 +16,9 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
     "@babel/plugin-transform-async-to-generator": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
+    "cheerio": "^1.0.0-rc.3",
+    "jsdom": "^15.0.0",
+    "lodash": "^4.17.11",
     "moment": "^2.23.0",
     "winston": "^3.1.0"
   },

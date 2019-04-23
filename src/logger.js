@@ -24,19 +24,20 @@ if (process.env.NODE_ENV === 'development') {
 
   logger.log('info', `Console logger initialized to "${process.env.LOG_LEVEL || `${defaultConsoleLogLevel} (default)`}"`);
 }
+else {
+  logger.add(new winston.transports.File({
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.splat(),
+      winston.format.printf(info => `${new Date(info.timestamp).toISOString()} - ${info.level}: ${info.message}`)
+    ),
+    filename: `./logs/${timestamp}_log.log`,
+    level: process.env.LOG_LEVEL || defaultFileLogLevel,
+    maxsize: 1024 * 1024 * 10 // 10 MB rolling log files
+  }));
 
-logger.add(new winston.transports.File({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.splat(),
-    winston.format.printf(info => `${new Date(info.timestamp).toISOString()} - ${info.level}: ${info.message}`)
-  ),
-  filename: `./logs/${timestamp}_log.log`,
-  level: process.env.LOG_LEVEL || defaultFileLogLevel,
-  maxsize: 1024 * 1024 * 10 // 10 MB rolling log files
-}));
-
-logger.log('info', `File logger initialized to "${process.env.LOG_LEVEL || `${defaultFileLogLevel} (default)`}"`);
+  logger.log('info', `File logger initialized to "${process.env.LOG_LEVEL || `${defaultFileLogLevel} (default)`}"`);
+}
 
 /*
 Logging levels are as follows:
